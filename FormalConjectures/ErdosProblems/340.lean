@@ -77,6 +77,7 @@ theorem greedySidon_two : greedySidon 2 = 4 := by
 @[category test, AMS 5]
 theorem greedySidon_three : greedySidon 3 = 8 := by
   decide
+
 @[category test, AMS 5]
 theorem greedySidon_four : greedySidon 4 = 13 := by
   decide
@@ -87,7 +88,7 @@ theorem greedySidon_five : greedySidon 5 = 21 := by
 
 @[category test, AMS 5]
 theorem greedySidon_ten : greedySidon 10 = 97 := by
-  decide +native
+  native_decide
 
 /--
 Let $A = \{1, 2, 4, 8, 13, 21, 31, 45, 66, 81, 97, \ldots\}$ be the greedy Sidon sequence:

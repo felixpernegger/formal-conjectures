@@ -40,15 +40,15 @@ def IsSumOfBinomials (n : ℕ) : Prop :=
 
 @[category test, AMS 11]
 theorem isSumOfBinomials_1 : IsSumOfBinomials 1 :=
-  ⟨0, 0, 0, 0, by decide⟩
+  ⟨0, 0, 0, 0, rfl⟩
 
 @[category test, AMS 11]
 theorem isSumOfBinomials_3 : IsSumOfBinomials 3 :=
-  ⟨1, 0, 0, 0, by native_decide⟩
+  ⟨1, 0, 0, 0, rfl⟩
 
 @[category test, AMS 11]
 theorem isSumOfBinomials_6 : IsSumOfBinomials 6 :=
-  ⟨2, 0, 0, 0, by native_decide⟩
+  ⟨2, 0, 0, 0, rfl⟩
 
 /--
 **Zhi-Wei Sun's 2-4-6-8 Conjecture (A306477)**: Any integer $n > 0$ can be written as

@@ -25,24 +25,6 @@ any squarefree number; we give the junk value `1` at `n = 0` following the conve
 squarefree part of any square is `1`. -/
 def squarefreePart (n : ℕ) : ℕ := n.factorization.prod fun (p e : ℕ) ↦ p ^ (e % 2)
 
-example : squarefreePart 2 = 2 := by
-  decide +native
-
-example : squarefreePart 5 = 5 := by
-  decide +native
-
-example : squarefreePart 4 = 1 := by
-  decide +native
-
-example : squarefreePart 8 = 2 := by
-  decide +native
-
-example : squarefreePart 16 = 1 := by
-  decide +native
-
-example : squarefreePart 24 = 6 := by
-  decide +native
-
 theorem squarefreePart_ne_zero (n : ℕ) : n.squarefreePart ≠ 0 := by
   simp [squarefreePart]
 
@@ -78,15 +60,34 @@ theorem squarefreePart_factorization (n : ℕ) {p : ℕ} (hp : p.Prime) :
 theorem Prime.squarefree {p : ℕ} (hp : p.Prime) : Squarefree p := Irreducible.squarefree hp
 
 theorem squarefree_squarefreePart (n : ℕ) : Squarefree n.squarefreePart := by
-  refine Nat.squarefree_iff_factorization_le_one n.squarefreePart_ne_zero |>.2 fun p ↦ ?_
+  refine squarefree_iff_factorization_le_one n.squarefreePart_ne_zero |>.2 fun p ↦ ?_
   by_cases hp : p.Prime
-  · linarith [n.squarefreePart_factorization hp, Nat.mod_lt (n.factorization p) two_pos]
+  · linarith [n.squarefreePart_factorization hp, mod_lt (n.factorization p) two_pos]
   · linarith [factorization_eq_zero_of_non_prime n.squarefreePart hp]
 
 theorem squarefreePart_dvd (n : ℕ) : squarefreePart n ∣ n := by
-  rcases eq_or_ne n 0 with (rfl | h₀); simp
-  exact Nat.factorization_prime_le_iff_dvd n.squarefreePart_ne_zero h₀ |>.1 fun p hp ↦
-    squarefreePart_factorization _ hp ▸ Nat.mod_le _ _
+  rcases eq_or_ne n 0 with (rfl | h₀)
+  · exact Nat.dvd_zero (squarefreePart 0)
+  exact factorization_prime_le_iff_dvd n.squarefreePart_ne_zero h₀ |>.1 fun p hp ↦
+    squarefreePart_factorization _ hp ▸ mod_le _ _
+
+example : squarefreePart 2 = 2 := by
+  rw [squarefreePart_of_squarefree squarefree_two]
+
+example : squarefreePart 5 = 5 := by
+  rw [squarefreePart_of_squarefree (Prime.squarefree prime_five)]
+
+example : squarefreePart 4 = 1 :=
+  squarefreePart_of_isSquare ⟨2, rfl⟩
+
+example : squarefreePart 8 = 2 := by
+  decide +native
+
+example : squarefreePart 16 = 1 :=
+  squarefreePart_of_isSquare ⟨4, rfl⟩
+
+example : squarefreePart 24 = 6 := by
+  decide +native
 
 /-- The square part is the value of `b ^ 2` in the squarefree decomposition of `n = a₀ * b ^ 2`. -/
 def squarePart (n : ℕ) : ℕ := n / n.squarefreePart
@@ -95,9 +96,9 @@ theorem squarePart_zero : squarePart 0 = 0 := by simp [squarePart]
 
 /-- The squarefree decomposition of a natural number. -/
 theorem squarefreePart_mul_squarePart (n : ℕ) : n.squarefreePart * n.squarePart = n :=
-  Nat.mul_div_eq_iff_dvd.2 n.squarefreePart_dvd
+  mul_div_eq_iff_dvd.2 n.squarefreePart_dvd
 
 theorem squarefree_infinite : Set.Infinite { n : ℕ | Squarefree n } :=
-  Set.Infinite.mono (fun _ hp ↦ hp.squarefree) Nat.infinite_setOf_prime
+  Set.Infinite.mono (fun _ hp ↦ hp.squarefree) infinite_setOf_prime
 
 end Nat
